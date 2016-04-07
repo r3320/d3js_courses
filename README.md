@@ -1,13 +1,12 @@
 # examination_video_module
 
-Модули идентификации, видео-наблюдения и просмотра архивов.
+D3JS Courses
 
 ### Серверная часть
 
 * [Debian GNU/Linux](http://www.debian.org) или [Ubuntu](http://www.ubuntu.com)
 * [node.js](http://www.nodejs.org)
 * [MongoDB](http://mongodb.org)
-* [Kurento Media Server](http://kurento.com)
 
 Системные требования:
 
