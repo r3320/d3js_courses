@@ -1,0 +1,22 @@
+var rest = require('./rest');
+var profile = require('./profile');
+var storage = require('./storage');
+var stream = require('./stream');
+var chat = require('./chat');
+var tools = require('./tools');
+var verify = require('./verify');
+var vision = require('./vision');
+var examSession = require('./examSession');
+var exam = require('./exam');
+module.exports = function(app) {
+    app.use('/rest', rest);
+    app.use('/profile', profile);
+    app.use('/storage', profile.isAuth, storage);
+    app.use('/tools', profile.isAuth, tools);
+    app.use('/verify', profile.isInspector, verify);
+    app.use('/examSession', profile.isInspector, examSession);
+    app.use('/vision', profile.isInspector, vision);
+    app.use('/chat', profile.isAuth, chat);
+    app.use('/stream', profile.isAuth, stream);
+    app.use('/exam', profile.isAuth, exam);
+};

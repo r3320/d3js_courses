@@ -1,0 +1,22 @@
+<script type="text/template" id="main-tpl">
+<style>
+</style>
+<div class="modal-content">
+    <div class="modal-header bootstrap-dialog-draggable">
+        <div class="row">
+            <div class="col-md-8 col-xs-8">
+                <span class="task-name"><%- taskModelAttributes.taskName %></span> <span class="remaining"> [<%- taskModelAttributes.number %>/<%- numberOfTasks %>]</span>
+            </div>
+            <div class="col-md-4 col-xs-4">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+        </div>    
+    </div>
+    <div class="modal-body">
+        <p class="task-description"><%- taskModelAttributes.taskDescription %></p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%- i18n.t('taskPopup.buttonDoTheTask') %></button>
+    </div>
+</div>
+</script>

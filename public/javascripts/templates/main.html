@@ -1,0 +1,27 @@
+<script type="text/template" id="main-tpl">
+<style>
+	.panel {
+		min-height: 400px;
+		width: 100%;
+		border: 1px solid #ddd;
+	}
+	
+</style>
+<nav class="navbar navbar-default navbar-static-top">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="#"><%- i18n.t('app.title') %></a>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6 col-xs-6 left">
+			<div class="panel panel-code-html">HTML editor here</div>
+			<div class="panel panel-code-js">JS editor here</div>
+		</div>
+		<div class="col-md-6 col-xs-6 right">
+			<div class="panel panel-view-result">Result here</div>
+			<div class="panel panel-check-result">Check result here</div>
+		</div>
+	</div>
+</div>
+</script>

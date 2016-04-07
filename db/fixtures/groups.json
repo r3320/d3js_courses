@@ -1,0 +1,30 @@
+[
+  {
+    "examId": 1,
+    "username": "student1"
+  },
+  {
+    "examId": 1,
+    "username": "student2"
+  },
+  {
+    "examId": 1,
+    "username": "student3"
+  },
+  {
+    "examId": 1,
+    "username": "student4"
+  },
+  {
+    "examId": 1,
+    "username": "student5"
+  },
+  {
+    "examId": 1,
+    "username": "inspector2"
+  },
+  {
+    "examId": 1,
+    "username": "inspector1"
+  }
+]
