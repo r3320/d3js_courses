@@ -1,6 +1,4 @@
-# examination_video_module
-
-D3JS Courses
+# D3JS Courses
 
 ### Серверная часть
 
