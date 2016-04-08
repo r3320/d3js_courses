@@ -6,5 +6,13 @@ define({
     "loading": "Ждите, идет загрузка данных...",
     "taskPopup": {
         "buttonDoTheTask": "Выполнить задание"
+    },
+    "checkResult": {
+        "sample": "Образец",
+        "result": "Результат",
+        "overlay": "Наложение",
+        "difference": "Различия",
+        "theory": "Теория",
+        "check": "Проверить"
     }
 });
