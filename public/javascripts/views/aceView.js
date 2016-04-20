@@ -36,10 +36,11 @@ define([
                     mode = "javascript";
                 }
                 this.editor.getSession().setMode("ace/mode/"+mode);
+                if (postInIframe) this.options.postJs(this.editor);
             } else {
                 this.editor.getSession().setMode("ace/mode/html");
+                if (postInIframe) this.options.postHtml(this.editor);
             }
-            if (postInIframe) this.options.postInIframe(this.editor);
             return this;
         },
         destroy: function() {

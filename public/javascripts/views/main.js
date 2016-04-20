@@ -20,7 +20,8 @@ define([
             // Sub views
             this.view = {
                 aceView: new AceView({
-                    postInIframe: this.postInIframe.bind(this)
+                    postHtml: this.postHtml.bind(this),
+                    postJs: this.postJs.bind(this)
                 }),
                 visual: new VisualView(),
                 checkResult: new CheckResultView({
@@ -42,7 +43,7 @@ define([
             this.$el.html(tpl(data));
             this.view.visual.setElement(this.$(".panel-view-result")).render();
             this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
-            this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", false);
+            this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
             this.view.checkResult.setElement(this.$('.panel-check-result')).render();
             //this.$('panel-code-html').html(this.view.aceView.render().el);
             this.tasks.fetch({
@@ -77,13 +78,29 @@ define([
             self.view.taskPopup.setElement(this.dialog.getModalDialog()).render(taskModel, numberOfTasks);
             this.dialog.open();
         },
-        postInIframe: function(editor) {
-            var iframe = this.view.visual.$(".visual-iframe")[0];
-            var doc = iframe.contentDocument;
-            console.log(doc);
-            editor.getSession().on("change", function() {
-                doc.write(editor.getValue());
+        postHtml: function(editor) {
+            var self = this;
+            editor.getSession().on("change", function(event) {
+                try {
+                    self.view.visual.doc.body.innerHTML = editor.getValue();
+                } catch(e) {
+                    console.log(e);
+                }
             });
+        },
+        postJs: function(editor) {
+            var self = this;
+            editor.getSession().on("change", function(event) {
+                self.lastUpdatedTime = moment.now();
+                
+                setTimeout(function() {
+                    if (!self.lastUpdatedTime || moment().diff(self.lastUpdatedTime) > 1000) {
+                        self.view.visual.loadScript(editor.getValue());
+                    }
+                }, 1000);
+                //self.lastUpdatedTime = moment.now();
+            });
+            self.view.visual.loadScript(editor.getValue());
         }
     });
     return View;
