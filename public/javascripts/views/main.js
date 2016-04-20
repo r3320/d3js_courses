@@ -46,8 +46,8 @@ define([
             };
             this.$el.html(tpl(data));
             this.view.visual.setElement(this.$(".panel-view-result")).render();
-            this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
-            this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
+            this.hmtlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
+            this.jsAce = this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
             this.view.checkResult.setElement(this.$('.panel-check-result')).render();
             //this.$('panel-code-html').html(this.view.aceView.render().el);
             this.tasks.fetch({
@@ -87,6 +87,7 @@ define([
             editor.getSession().on("change", function(event) {
                 try {
                     self.view.visual.doc.body.innerHTML = editor.getValue();
+                    self.postJs(self.jsAce.editor);
                 } catch(e) {
                     console.log(e);
                 }
