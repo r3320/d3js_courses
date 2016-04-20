@@ -11,6 +11,10 @@ define([
 ], function(i18n, template, TaskPopupView, AceView, VisualView, CheckResultView) {
     console.log('views/main.js');
     var View = Backbone.View.extend({
+        events: {
+            "click .active-js": "openJs",
+            "click .active-html": "openHtml"
+        },
         initialize: function(options) {
             // Variables
             this.historyFlag = false;
@@ -101,6 +105,20 @@ define([
                 //self.lastUpdatedTime = moment.now();
             });
             self.view.visual.loadScript(editor.getValue());
+        },
+        openHtml: function(event) {
+            event.preventDefault();
+            this.$(".active-js").removeClass("active");
+            this.$(".panel-code-js").css("z-index", "10");
+            this.$(".active-html").addClass("active");
+            this.$(".panel-code-html").css("z-index", "100");
+        },
+        openJs: function(event) {
+            event.preventDefault();
+            this.$(".active-html").removeClass("active");
+            this.$(".panel-code-html").css("z-index", "10");
+            this.$(".active-js").addClass("active");
+            this.$(".panel-code-js").css("z-index", "100");
         }
     });
     return View;

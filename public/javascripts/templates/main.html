@@ -1,11 +1,22 @@
 <script type="text/template" id="main-tpl">
 <style>
-	.panel {
-		min-height: 400px;
-		width: 100%;
+	#content .panel {
+		width: 96%;
 		border: 1px solid #ddd;
 	}
-	
+	#content .panel-code-html {
+		min-height: 685px;
+		position: absolute;
+		z-index: 10;
+	}
+	#content .panel-code-js {
+		min-height: 685px;
+		position: absolute;
+		z-index: 100;
+	}
+	#content .panel-view-result {
+		margin-top: 42px;
+	}
 </style>
 <nav class="navbar navbar-default navbar-static-top">
 	<div class="navbar-header">
@@ -15,6 +26,10 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-6 col-xs-6 left">
+			<ul class="nav nav-tabs">
+				<li role="presentation" class="active-html"><a href="#">HTML</a></li>
+				<li role="presentation" class="active-js active"><a href="#">Javascript</a></li>
+			</ul>
 			<div class="panel panel-code-html">HTML editor here</div>
 			<div class="panel panel-code-js">JS editor here</div>
 		</div>
