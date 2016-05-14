@@ -94,9 +94,8 @@ define([
             editor.getSession().on("change", function(event) {
                 try {
                     self.view.visual.doc.body.innerHTML = editor.getValue();
-                    //self.view.visual.loadScript(self.jsAce.editor.getValue());
                     
-                    console.log(self.jsAce.getSession());
+                    //Обновим скрипт в iframe из js Ace
                     self.view.visual.loadScript(self.jsAce.getValue());
                 } catch(e) {
                     console.log(e);
@@ -106,15 +105,14 @@ define([
         postJs: function(editor) {
             var self = this;
             editor.getSession().on("change", function(event) {
+                //Обновим iframe контент из html Ace
                 self.view.visual.doc.body.innerHTML = self.htmlAce.getValue();
+                
                 self.lastUpdatedTime = moment.now();
                 
                 setTimeout(function() {
                     if (!self.lastUpdatedTime || moment().diff(self.lastUpdatedTime) > 1000) {
                         self.view.visual.loadScript(editor.getValue());
-                        
-                        console.log(self.htmlAce.getSession());
-                        //self.view.visual.doc.body.innerHTML = self.htmlAce.getValue();
                     }
                 }, 1000);
                 //self.lastUpdatedTime = moment.now();
