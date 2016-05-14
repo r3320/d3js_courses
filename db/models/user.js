@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var Schema = mongoose.Schema;
 var Attach = require('./attach').schema;
+var Course = require("./course").schema;
 var User = new Schema({
     // Логин
     username: {
@@ -93,7 +94,13 @@ var User = new Schema({
     },
     // Связанные с пользователем файлы
     // Первый элемент массива - фотография пользователя
-    attach: [Attach]
+    attach: [Attach],
+    // Пройденные курсы
+    completedCourses: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Course',
+        required: true
+    }]
 });
 User.methods.encryptPassword = function(password) {
     return crypto.createHmac('sha1', this.salt).update(password).digest('hex');

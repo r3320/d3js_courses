@@ -8,6 +8,7 @@ var verify = require('./verify');
 var vision = require('./vision');
 var examSession = require('./examSession');
 var exam = require('./exam');
+var course = require('./course');
 module.exports = function(app) {
     app.use('/rest', rest);
     app.use('/profile', profile);
@@ -19,4 +20,5 @@ module.exports = function(app) {
     app.use('/chat', profile.isAuth, chat);
     app.use('/stream', profile.isAuth, stream);
     app.use('/exam', profile.isAuth, exam);
+    app.use('/course', profile.isAuth, course);
 };

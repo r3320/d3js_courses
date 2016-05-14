@@ -7,7 +7,12 @@ define([
     var View = Backbone.View.extend({
         className: "ace-view",
         events: {
-            "click .btn-theory": "openTheory"
+            "click .btn-theory": "openTheory",
+            "click .btn-check": "checkResult",
+            "click .btn-sample": "openSample",
+            "click .btn-result": "openResult",
+            "click .btn-overlay": "openOverlay",
+            "click .btn-difference": "openDifference"
         },
         initialize: function(options) {
             // Variables
@@ -36,6 +41,45 @@ define([
         openTheory: function(event) {
             event.preventDefault();
             this.options.openPopup();
+        },
+        checkResult: function(event) {
+            if (event) event.preventDefault();
+            //Вернет canvas
+            this.options.takeScreenshot();
+            this.openResult();
+            //console.log(canvas);
+        },
+        openResult: function(event) {
+            if (event) event.preventDefault();
+            
+            this.$(".panel-result").css("z-index", 100);
+            this.$(".panel-sample").css("z-index", 1);
+            this.$(".panel-overlay").css("z-index", 1);
+            this.$(".panel-difference").css("z-index", 1);
+        },
+        openSample: function(event) {
+            if (event) event.preventDefault();
+            
+            this.$(".panel-sample").css("z-index", 100);
+            this.$(".panel-result").css("z-index", 1);
+            this.$(".panel-overlay").css("z-index", 1);
+            this.$(".panel-difference").css("z-index", 1);
+        },
+        openOverlay: function(event) {
+            if (event) event.preventDefault();
+            
+            this.$(".panel-overlay").css("z-index", 100);
+            this.$(".panel-sample").css("z-index", 1);
+            this.$(".panel-result").css("z-index", 1);
+            this.$(".panel-difference").css("z-index", 1);
+        },
+        openDifference: function(event) {
+            if (event) event.preventDefault();
+            
+            this.$(".panel-difference").css("z-index", 100);
+            this.$(".panel-overlay").css("z-index", 1);
+            this.$(".panel-sample").css("z-index", 1);
+            this.$(".panel-result").css("z-index", 1);
         }
     });
     return View;

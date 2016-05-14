@@ -1,7 +1,19 @@
 <script type="text/template" id="main-tpl">
 <style>
     .panel-body {
-        min-height: 200px;
+        height: 300px;
+        padding: 0;
+    }
+    .panel-sample, .panel-result, .panel-overlay, .panel-difference {
+        position: absolute;
+        width: 530px;
+        height: 200px;
+        z-index: 1;
+        overflow: hidden;
+        background: white;
+    }
+    .panel-sample {
+        z-index: 100;
     }
 </style>
     <div class="panel panel-default">
@@ -14,7 +26,10 @@
             </div>
         </div>
         <div class="panel-body">
-            Четотут
+            <div class="panel-sample"></div>
+            <div class="panel-result"></div>
+            <div class="panel-overlay"></div>
+            <div class="panel-difference"></div>
         </div>
         <div class="panel-footer">
             <div class="btn-group">

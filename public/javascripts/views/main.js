@@ -13,7 +13,8 @@ define([
     var View = Backbone.View.extend({
         events: {
             "click .active-js": "openJs",
-            "click .active-html": "openHtml"
+            "click .active-html": "openHtml",
+            "click .logout-btn": "doLogout"
         },
         initialize: function(options) {
             // Variables
@@ -29,12 +30,14 @@ define([
                 }),
                 visual: new VisualView(),
                 checkResult: new CheckResultView({
-                    openPopup: this.openPopup.bind(this)
+                    openPopup: this.openPopup.bind(this),
+                    takeScreenshot: this.takeScreenshot.bind(this)
                 })
             };
-            this.firstModelAt = 0;
+            this.firstModelAt = options.page;
             var Tasks = Backbone.Collection.extend({
-                url: "data/tasks.json"
+                //url: "data/tasks.json"
+                url: "/course"
             });
             this.tasks = new Tasks();
         },
@@ -120,6 +123,13 @@ define([
             this.$(".panel-code-html").css("z-index", "10");
             this.$(".active-js").addClass("active");
             this.$(".panel-code-js").css("z-index", "100");
+        },
+        doLogout: function(event) {
+            event.preventDefault();
+            app.logout();
+        },
+        takeScreenshot: function() {
+            return this.view.visual.takeScreenshot();
         }
     });
     return View;

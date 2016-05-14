@@ -29,7 +29,7 @@ define([
             this.$el.html(tpl(data));
             var iframe = this.$(".visual-iframe")[0];
             this.doc =  iframe.contentDocument || iframe.contentWindow.document;
-            
+            app.iframe = this.doc;
             this.loadDefaultScripts();
             return this;
         },
@@ -52,6 +52,23 @@ define([
             this.scr.className = "d3script";
             this.scr.textContent = scriptContent;
             this.doc.head.appendChild(this.scr);
+        },
+        takeScreenshot: function() {
+            var self = this;
+            var out;
+            if (document.querySelector(".panel-result").firstChild) {
+                document.querySelector(".panel-result").removeChild(document.querySelector(".panel-result").firstChild);
+            }
+            html2canvas(this.doc.body, {
+                onrendered: function(canvas) {
+                    //Do things with output canvas
+                    //self.doc.body.appendChild(canvas);
+                    document.querySelector(".panel-result").appendChild(canvas);
+                },
+                width: 530,
+                height: 300
+            });
+            return out;
         }
     });
     return View;

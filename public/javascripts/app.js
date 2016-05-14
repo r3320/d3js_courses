@@ -115,11 +115,45 @@ $.fn.serializeObject = function() {
 require([
     "i18n",
     "router",
-], function(i18n, Router) {
+    "models/profile",
+    "models/time"
+], function(i18n, Router, ProfileModel, TimeModel) {
     console.log('app.js');
     // app
     window.app = {
         router: new Router(),
+        time: new TimeModel(),
+        profile: new ProfileModel(),
+        login: function(username, password, error) {
+            var self = this;
+            this.profile.clear().save({
+                username: username,
+                password: password
+            }, {
+                success: function() {
+                    self.time.syncTime();
+                    self.connect();
+                    self.router.navigate("", {
+                        trigger: true
+                    });
+                },
+                error: error
+            });
+        },
+        logout: function(options) {
+            var self = this;
+            _.postMessage('clearCookies', '*');
+            this.profile.destroy({
+                success: function(model) {
+                    model.clear();
+                    self.time.stop();
+                    self.disconnect();
+                    self.router.navigate("login", {
+                        trigger: true
+                    });
+                }
+            });
+        },
         connect: function(options) {
             if (this.io) return;
             var url = window.location.host;
@@ -133,13 +167,25 @@ require([
                 if (this.io[k]) this.io[k].disconnect();
             }
             this.io = null;
+        },
+        isAuth: function() {
+            return this.profile.has("username");
+        },
+        isMe: function(id) {
+            return this.profile.get('_id') === id;
+        },
+        now: function() {
+            return this.time.now();
         }
     };
     // starting
     $(document).ready(function() {
         console.log('ready');
         document.title = i18n.t('app.title');
-        app.connect();
+        if (app.isAuth()) {
+            app.time.syncTime();
+            app.connect();
+        }
         Backbone.history.start();
     });
 });

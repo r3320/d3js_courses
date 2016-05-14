@@ -114,8 +114,28 @@ router.get('/:userId', router.isMyself, function(req, res) {
     var args = {
         userId: req.params.userId
     };
-    profile.info(args, function(err, data) {
+    profile.get(args, function(err, data) {
         if (!err && data) {
+            res.json(data);
+        }
+        else {
+            res.status(400).end();
+        }
+    });
+});
+
+// Update user profile and session by id
+router.put('/:userId', /*router.isMyself,*/ function(req, res) {
+    var args = {
+        userId: req.params.userId,
+        data: req.body
+    };
+    profile.update(args, function(err, data) {
+        if (!err && data) {
+            /*req.login(data, function(error) {
+                if (error) res.status(400).end();
+                else res.json(data);
+            });*/
             res.json(data);
         }
         else {

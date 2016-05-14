@@ -5,10 +5,12 @@ define([
 ], function(i18n, template) {
     console.log('views/start.js');
     var View = Backbone.View.extend({
-        /*events: {
-            "click .start-btn": "start"
-        },*/
+        events: {
+            //"click .start-btn": "start"
+            "click .logout-btn": "doLogout"
+        },
         initialize: function(options) {
+            var self = this;
             // Variables
             this.historyFlag = false;
             this.options = options || {};
@@ -16,6 +18,41 @@ define([
             this.templates = _.parseTemplate(template);
             // Sub views
             this.view = {};
+            
+            var Courses = Backbone.Collection.extend({
+                url: "/course"
+            });
+            this.courses = new Courses();
+            this.firstModelAt = 0;
+            this.listenTo(this.courses, 'add', this.appendCourse);
+            
+            this.courseView = Backbone.View.extend({
+                tagName: "tr",
+                events: {
+                    "click .start-course-btn": "start"
+                },
+                initialize: function() {
+                    this.tpl = _.template(self.templates['course-td-tpl']);
+                    this.listenTo(this.model, 'change', this.render);
+                    this.listenTo(this.model, 'remove', this.remove);
+                    this.listenTo(this.model, 'destroy', this.remove);
+                },
+                render: function(number) {
+                    this.number = number;
+                    console.log(this.model.attributes._id);
+                    var data = {
+                        course: this.model.attributes
+                    };
+                    this.$el.html(this.tpl(data));
+                    return this;
+                },
+                start: function(event) {
+                    event.preventDefault();
+                    app.router.navigate("main/" + this.number, {
+                        trigger: true
+                    });
+                }
+            });
         },
         render: function() {
             var self = this;
@@ -24,6 +61,12 @@ define([
                 i18n: i18n
             };
             this.$el.html(tpl(data));
+            this.courses.fetch(/*{
+                success: function(collection, response, options) {
+                    self.populateCoursesTable(collection);
+                }
+            }*/);
+            this.$outputCoursesBody = this.$(".courses-body");
             return this;
         },
         destroy: function() {
@@ -31,11 +74,19 @@ define([
                 if (this.view[v]) this.view[v].destroy();
             }
             this.remove();
-        }/*,
-        start: function(event) {
+        },
+        appendCourse: function(courseModel) {
+            var self = this;
+            var view = new this.courseView({
+                model: courseModel
+            });
+            this.$outputCoursesBody.append(view.render(this.firstModelAt).el);
+            this.firstModelAt++;
+        },
+        doLogout: function(event) {
             event.preventDefault();
-            app.navigate("main", {trigger: true, replace: true});
-        }*/
+            app.logout();
+        }
     });
     return View;
 });

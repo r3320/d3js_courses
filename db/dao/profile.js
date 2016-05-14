@@ -109,7 +109,8 @@ module.exports = {
         });
     },
     get: function(args, callback) {
-        User.findById(args.userId).exec(callback);
+        //User.findById(args.userId).exec(callback);
+        User.findById(args.userId).populate('completedCourses').exec(callback);
     },
     update: function(args, callback) {
         var data = args.data || {};
@@ -120,6 +121,8 @@ module.exports = {
         }, {
             'new': true
         }, function(err, user) {
+            console.log(user);
+            console.log(err);
             callback(err, user);
             // save virtual field
             if (data.password) {
@@ -127,7 +130,7 @@ module.exports = {
                 user.save();
             }
             // store attach
-            if (!err && data) storage.update(attach);
+            //if (!err && data) storage.update(attach);
         });
     },
     add: function(args, callback) {
