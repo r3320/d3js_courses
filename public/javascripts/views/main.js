@@ -49,8 +49,12 @@ define([
             };
             this.$el.html(tpl(data));
             this.view.visual.setElement(this.$(".panel-view-result")).render();
-            this.hmtlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
+            //АХТУНГ - aceView.render() возвращает this.editor !!!
+            this.htmlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
+            console.log(this.htmlAce.getSession());
             this.jsAce = this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
+            console.log(this.jsAce.getSession());
+            console.log(this.htmlAce.getSession());
             this.view.checkResult.setElement(this.$('.panel-check-result')).render();
             //this.$('panel-code-html').html(this.view.aceView.render().el);
             this.tasks.fetch({
@@ -90,7 +94,10 @@ define([
             editor.getSession().on("change", function(event) {
                 try {
                     self.view.visual.doc.body.innerHTML = editor.getValue();
-                    self.postJs(self.jsAce.editor);
+                    //self.view.visual.loadScript(self.jsAce.editor.getValue());
+                    
+                    console.log(self.jsAce.getSession());
+                    self.view.visual.loadScript(self.jsAce.getValue());
                 } catch(e) {
                     console.log(e);
                 }
@@ -99,16 +106,21 @@ define([
         postJs: function(editor) {
             var self = this;
             editor.getSession().on("change", function(event) {
+                self.view.visual.doc.body.innerHTML = self.htmlAce.getValue();
                 self.lastUpdatedTime = moment.now();
                 
                 setTimeout(function() {
                     if (!self.lastUpdatedTime || moment().diff(self.lastUpdatedTime) > 1000) {
                         self.view.visual.loadScript(editor.getValue());
+                        
+                        console.log(self.htmlAce.getSession());
+                        //self.view.visual.doc.body.innerHTML = self.htmlAce.getValue();
                     }
                 }, 1000);
                 //self.lastUpdatedTime = moment.now();
             });
             self.view.visual.loadScript(editor.getValue());
+            console.log("test1");
         },
         openHtml: function(event) {
             event.preventDefault();

@@ -26,7 +26,8 @@ define([
             };
             this.$el.html(tpl(data));
             console.log("aceViewRender");
-
+            
+            this.mode = mode;
             var elementToEdit = this.$("#editor")[0];
             this.editor = ace.edit(elementToEdit);
             this.editor.setTheme("ace/theme/textmate");
@@ -41,7 +42,7 @@ define([
                 this.editor.getSession().setMode("ace/mode/html");
                 if (postInIframe) this.options.postHtml(this.editor);
             }
-            return this;
+            return this.editor;
         },
         destroy: function() {
             for (var v in this.view) {

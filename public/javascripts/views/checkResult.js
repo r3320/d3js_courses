@@ -56,6 +56,11 @@ define([
             this.$(".panel-sample").css("z-index", 1);
             this.$(".panel-overlay").css("z-index", 1);
             this.$(".panel-difference").css("z-index", 1);
+            
+            this.$(".btn-sample").removeClass("active");
+            this.$(".btn-overlay").removeClass("active");
+            this.$(".btn-difference").removeClass("active");
+            this.$(".btn-result").addClass("active");
         },
         openSample: function(event) {
             if (event) event.preventDefault();
@@ -64,6 +69,11 @@ define([
             this.$(".panel-result").css("z-index", 1);
             this.$(".panel-overlay").css("z-index", 1);
             this.$(".panel-difference").css("z-index", 1);
+            
+            this.$(".btn-result").removeClass("active");
+            this.$(".btn-overlay").removeClass("active");
+            this.$(".btn-difference").removeClass("active");
+            this.$(".btn-sample").addClass("active");
         },
         openOverlay: function(event) {
             if (event) event.preventDefault();
@@ -72,6 +82,11 @@ define([
             this.$(".panel-sample").css("z-index", 1);
             this.$(".panel-result").css("z-index", 1);
             this.$(".panel-difference").css("z-index", 1);
+            
+            this.$(".btn-result").removeClass("active");
+            this.$(".btn-difference").removeClass("active");
+            this.$(".btn-sample").removeClass("active");
+            this.$(".btn-overlay").addClass("active");
         },
         openDifference: function(event) {
             if (event) event.preventDefault();
@@ -80,6 +95,11 @@ define([
             this.$(".panel-overlay").css("z-index", 1);
             this.$(".panel-sample").css("z-index", 1);
             this.$(".panel-result").css("z-index", 1);
+            
+            this.$(".btn-result").removeClass("active");
+            this.$(".btn-sample").removeClass("active");
+            this.$(".btn-overlay").removeClass("active");
+            this.$(".btn-difference").addClass("active");
         }
     });
     return View;
