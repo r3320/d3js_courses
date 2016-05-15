@@ -51,10 +51,7 @@ define([
             this.view.visual.setElement(this.$(".panel-view-result")).render();
             //АХТУНГ - aceView.render() возвращает this.editor !!!
             this.htmlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
-            console.log(this.htmlAce.getSession());
             this.jsAce = this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
-            console.log(this.jsAce.getSession());
-            console.log(this.htmlAce.getSession());
             this.view.checkResult.setElement(this.$('.panel-check-result')).render();
             //this.$('panel-code-html').html(this.view.aceView.render().el);
             this.tasks.fetch({
