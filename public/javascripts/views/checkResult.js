@@ -30,6 +30,7 @@ define([
                 i18n: i18n
             };
             this.$el.html(tpl(data));
+            
             return this;
         },
         destroy: function() {
@@ -42,12 +43,27 @@ define([
             event.preventDefault();
             this.options.openPopup();
         },
+        appendImage: function(taskModel) {
+            var image = new Image();
+            image.src = taskModel.attributes.taskData;
+            this.sample = document.querySelector(".panel-sample").appendChild(image);
+        },
         checkResult: function(event) {
             if (event) event.preventDefault();
             //Вернет canvas
             this.options.takeScreenshot();
+            this.checkDiff();
             this.openResult();
             //console.log(canvas);
+        },
+        checkDiff: function() {
+            var userResult = document.querySelector("canvas");
+            var sample = this.sample;
+            resemble(sample.src).compareTo(userResult.toDataURL()).onComplete(function(data) {
+                    var i = new Image;
+                    i.src = data.getImageDataUrl();
+                    document.querySelector(".panel-difference").appendChild(i);
+            });
         },
         openResult: function(event) {
             if (event) event.preventDefault();
