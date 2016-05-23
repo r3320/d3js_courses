@@ -30,6 +30,7 @@ define([
             var iframe = this.$(".visual-iframe")[0];
             this.doc =  iframe.contentDocument || iframe.contentWindow.document;
             app.iframe = this.doc;
+            this.doc.body.setAttribute("margin", "0px");
             this.loadDefaultScripts();
             return this;
         },
@@ -53,9 +54,9 @@ define([
             this.scr.textContent = scriptContent;
             this.doc.head.appendChild(this.scr);
         },
-        takeScreenshot: function() {
+        takeScreenshot: function(callback) {
             var self = this;
-            var out;
+            if (!this.doc.querySelector("svg")) return;
             if (document.querySelector(".panel-result").firstChild) {
                 document.querySelector(".panel-result").removeChild(document.querySelector(".panel-result").firstChild);
             }
@@ -71,7 +72,7 @@ define([
             var canvas = document.createElement("canvas");
             canvas.height = 300;
             canvas.width = 530;
-            
+            canvas.className = "userResult";
             
             document.querySelector(".panel-result").appendChild(canvas);
             
@@ -85,11 +86,12 @@ define([
             var newsvg = new Blob([svg], {type: 'image/svg+xml;charset=utf-8'});
             console.log(newsvg);
             var url = DOMURL.createObjectURL(newsvg);
-            console.log(url);
+            console.log(callback);
             img.onload = function () {
-              ctx.drawImage(img, 0, 0);
-              console.log(ctx);
-              DOMURL.revokeObjectURL(url);
+                ctx.drawImage(img, 0, 0);
+                console.log(ctx);
+                DOMURL.revokeObjectURL(url);
+                callback();
             }
             img.src = url;
         }

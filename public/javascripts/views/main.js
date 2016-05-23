@@ -137,8 +137,8 @@ define([
             event.preventDefault();
             app.logout();
         },
-        takeScreenshot: function() {
-            return this.view.visual.takeScreenshot();
+        takeScreenshot: function(callback) {
+            return this.view.visual.takeScreenshot(callback);
         }
     });
     return View;
