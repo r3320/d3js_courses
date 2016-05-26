@@ -52,15 +52,18 @@ define([
             //АХТУНГ - aceView.render() возвращает this.editor !!!
             this.htmlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
             this.jsAce = this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
+            app.htmlAce = this.htmlAce;
             //this.$('panel-code-html').html(this.view.aceView.render().el);
             this.view.checkResult.setElement(this.$('.panel-check-result')).render();
             this.tasks.fetch({
                 success: function(collection, response, options) {
-                    self.currentTask = collection.at(self.firstModelAt);
+                    //self.currentTask = collection.at(self.firstModelAt);
+                    self.currentTask = collection.findWhere({number: eval(self.firstModelAt)});;
                     self.numberOfTasks = collection.length;
                     self.openPopup(self.currentTask, self.numberOfTasks);
                     //Вставим изображение в панель примера
-                    self.view.checkResult.appendImage(collection.at(self.firstModelAt));
+                    //self.view.checkResult.appendImage(collection.at(self.firstModelAt));
+                    self.view.checkResult.appendImage(self.currentTask);
                 }
             });
             return this;

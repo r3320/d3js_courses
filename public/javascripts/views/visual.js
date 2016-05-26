@@ -30,7 +30,7 @@ define([
             var iframe = this.$(".visual-iframe")[0];
             this.doc =  iframe.contentDocument || iframe.contentWindow.document;
             app.iframe = this.doc;
-            this.doc.body.setAttribute("margin", "0px");
+            this.doc.body.setAttribute("style", "margin: 0;");
             this.loadDefaultScripts();
             return this;
         },
