@@ -9,6 +9,7 @@ module.exports = {
         course.save(callback);
     },
     list: function (args, callback) {
-        Course.find({}, callback);
+        //Course.find({}, callback);
+        Course.find({}).sort({"number": 1}).exec(callback);
     }
 }

@@ -63,7 +63,7 @@
 <script type="text/template" id="course-td-tpl">
     <td>
         <h3><%- course.taskName %></h3>
-        <p><%- course.taskDescription %></p>
+        <p><%= course.taskDescription %></p>
     </td>
     <td><% if (_.indexOf(app.profile.attributes.completedCourses, course._id) != -1) {
             %> пройдено <%

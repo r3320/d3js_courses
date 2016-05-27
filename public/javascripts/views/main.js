@@ -14,6 +14,7 @@ define([
         events: {
             "click .active-js": "openJs",
             "click .active-html": "openHtml",
+            "click .active-data": "openData",
             "click .logout-btn": "doLogout"
         },
         initialize: function(options) {
@@ -52,6 +53,7 @@ define([
             //АХТУНГ - aceView.render() возвращает this.editor !!!
             this.htmlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
             this.jsAce = this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
+            this.dataAce = this.view.aceView.setElement(this.$('.panel-code-data')).render("javascript", true);
             app.htmlAce = this.htmlAce;
             //this.$('panel-code-html').html(this.view.aceView.render().el);
             this.view.checkResult.setElement(this.$('.panel-check-result')).render();
@@ -125,14 +127,27 @@ define([
         openHtml: function(event) {
             event.preventDefault();
             this.$(".active-js").removeClass("active");
+            this.$(".active-data").removeClass("active");
             this.$(".panel-code-js").css("z-index", "10");
+            this.$(".panel-code-data").css("z-index", "10");
             this.$(".active-html").addClass("active");
             this.$(".panel-code-html").css("z-index", "100");
+        },
+        openData: function(event) {
+            event.preventDefault();
+            this.$(".active-js").removeClass("active");
+            this.$(".active-html").removeClass("active");
+            this.$(".panel-code-js").css("z-index", "10");
+            this.$(".panel-code-html").css("z-index", "10");
+            this.$(".active-data").addClass("active");
+            this.$(".panel-code-data").css("z-index", "100");
         },
         openJs: function(event) {
             event.preventDefault();
             this.$(".active-html").removeClass("active");
+            this.$(".active-data").removeClass("active");
             this.$(".panel-code-html").css("z-index", "10");
+            this.$(".panel-code-data").css("z-index", "10");
             this.$(".active-js").addClass("active");
             this.$(".panel-code-js").css("z-index", "100");
         },

@@ -20,7 +20,15 @@ define([
             this.view = {};
             
             var Courses = Backbone.Collection.extend({
-                url: "/course"
+                url: "/course",
+                sort_key: "number", // default sort key
+                comparator: function(item) {
+                    return item.get(this.sort_key);
+                },
+                sortByField: function(fieldName) {
+                    this.sort_key = fieldName;
+                    this.sort();
+                }
             });
             this.courses = new Courses();
             this.firstModelAt = 0;
