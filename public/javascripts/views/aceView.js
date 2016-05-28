@@ -33,11 +33,13 @@ define([
             this.editor.setTheme("ace/theme/textmate");
             console.log(mode);
             if (mode && _.isString(mode) && mode != "") {
-                if (mode == "js") {
+                if (mode == "js" || mode == "javascript") {
                     mode = "javascript";
-                }
+                    if (postInIframe) this.options.postJs(this.editor);
+                } else if (mode == "data") {
+                    mode = "javascript";
+                }    
                 this.editor.getSession().setMode("ace/mode/"+mode);
-                if (postInIframe) this.options.postJs(this.editor);
             } else {
                 this.editor.getSession().setMode("ace/mode/html");
                 if (postInIframe) this.options.postHtml(this.editor);

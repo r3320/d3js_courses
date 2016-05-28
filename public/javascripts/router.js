@@ -1,10 +1,12 @@
 //
 // Router
 //
-define([], function() {
+define(["collections/courses"], function(Courses) {
     console.log('router.js');
     var $body = $('body');
     var $content = $('<div id="content"></div>');
+    var courses = new Courses();
+    courses.fetch();
     var Router = Backbone.Router.extend({
         routes: {
             "start": "start",
@@ -75,11 +77,11 @@ define([], function() {
             require([
                 "views/main"
             ], function(View) {
-                if (page) {
+                if (page && courses.findWhere({number: eval(page)})) {
                     self.render(View, {page: page}, true);
                 } else {
                     //self.render(View, null ,true);
-                    this.navigate("start", {
+                    self.navigate("start", {
                         trigger: true
                     });
                 }

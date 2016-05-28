@@ -140,7 +140,7 @@ define([
             tmp.appendChild(svgel);
             
             var data = taskModel.attributes.taskData.data;
-            var code = atob(taskModel.attributes.taskData.code);
+            var code = atob(taskModel.attributes.code);
             eval(code);
             //Задание
             var canvas = document.createElement("canvas");

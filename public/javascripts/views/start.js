@@ -31,7 +31,7 @@ define([
                 }
             });
             this.courses = new Courses();
-            this.firstModelAt = 0;
+            this.firstModelAt = 1;
             this.listenTo(this.courses, 'add', this.appendCourse);
             
             this.courseView = Backbone.View.extend({

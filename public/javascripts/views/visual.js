@@ -17,7 +17,8 @@ define([
             // Scripts for iframe
             this.defaultScripts = [
                 "bower_components/jquery/dist/jquery.min.js",
-                "bower_components/d3/d3.min.js"
+                "bower_components/d3/d3.min.js",
+                "bower_components/moment/moment.js"
             ];
         },
         render: function() {
