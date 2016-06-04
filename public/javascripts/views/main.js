@@ -54,17 +54,16 @@ define([
             this.htmlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
             this.jsAce = this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
             this.dataAce = this.view.aceView.setElement(this.$('.panel-code-data')).render("data", false);
-            app.dataAce = this.dataAce;
-            //this.$('panel-code-html').html(this.view.aceView.render().el);
-            this.view.checkResult.setElement(this.$('.panel-check-result')).render();
+            
+            //this.view.checkResult.setElement(this.$('.panel-check-result')).render();
             this.tasks.fetch({
                 success: function(collection, response, options) {
                     //self.currentTask = collection.at(self.firstModelAt);
                     self.currentTask = collection.findWhere({number: eval(self.firstModelAt)});
+                    self.view.checkResult.setElement(this.$('.panel-check-result')).render(self.currentTask);
                     self.numberOfTasks = collection.length;
                     self.openPopup(self.currentTask, self.numberOfTasks);
                     //Вставим изображение в панель примера
-                    //self.view.checkResult.appendImage(collection.at(self.firstModelAt));
                     self.view.checkResult.appendImage(self.currentTask);
                     self.dataAceActions(self.currentTask);
                 }
@@ -161,21 +160,37 @@ define([
         },
         dataAceActions: function(currentTask) {
             if (!currentTask.attributes.taskData.data) return;
+            
             var figureRe = /},/gi;
             var squareRe = /],/gi;
             var newFigureRe = "},\n";
             var newSquareRe = "],\n";
             
-            var figureStr = JSON.stringify(currentTask.attributes.taskData.data).replace(figureRe, newFigureRe);
-            figureStr = figureStr.replace(squareRe, newSquareRe);
-            var squareStr = JSON.stringify(currentTask.attributes.taskData.helpData).replace(squareRe, newSquareRe);
-            squareStr = squareStr.replace(figureRe, newFigureRe);
+            if (currentTask.attributes.taskData.data) {
+                var figureStr = JSON.stringify(currentTask.attributes.taskData.data).replace(figureRe, newFigureRe);
+                figureStr = figureStr.replace(squareRe, newSquareRe);
+            }
             
-            this.dataAce.insert("//" + currentTask.attributes.taskData.dataInfo + "\n");
-            this.dataAce.insert(figureStr);
+            if (currentTask.attributes.taskData.helpData) {
+                var squareStr = JSON.stringify(currentTask.attributes.taskData.helpData).replace(squareRe, newSquareRe);
+                squareStr = squareStr.replace(figureRe, newFigureRe);
+            }
+            
+            if (currentTask.attributes.taskData.dataInfo) {
+                this.dataAce.insert("//" + currentTask.attributes.taskData.dataInfo + "\n");
+            }
+            if (figureStr) {
+                this.dataAce.insert(figureStr);
+            }
+            
             this.dataAce.insert("\n\n");
-            this.dataAce.insert("//" + currentTask.attributes.taskData.helpInfo + "\n");
-            this.dataAce.insert(squareStr);
+            
+            if (currentTask.attributes.taskData.helpInfo) {
+                this.dataAce.insert("//" + currentTask.attributes.taskData.helpInfo + "\n");
+            }
+            if (squareStr) {
+                this.dataAce.insert(squareStr);
+            }
         }
     });
     return View;

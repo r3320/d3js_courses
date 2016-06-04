@@ -12,6 +12,10 @@
         overflow: hidden;
         background: white;
     }
+    .btn-next {
+        display: none;
+        float: right;
+    }
 </style>
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -25,14 +29,15 @@
         <div class="panel-body">
             <div class="panel-sample"></div>
             <div class="panel-result"></div>
-            <div class="panel-overlay"></div>
             <div class="panel-difference"></div>
+            <div class="panel-overlay"></div>
         </div>
         <div class="panel-footer">
             <div class="btn-group">
                 <a class="btn-theory btn btn-default" type="button" href="#"><%- i18n.t('checkResult.theory') %></a>
                 <a class="btn-check btn btn-default" type="button" href="#"><%- i18n.t('checkResult.check') %></a>
             </div>
+            <a class="btn-next btn btn-success" type="button" href="#"><%- i18n.t('checkResult.next') %></a>
         </div>
     </div>
 </script>

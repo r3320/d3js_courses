@@ -125,7 +125,7 @@ router.get('/:userId', router.isMyself, function(req, res) {
 });
 
 // Update user profile and session by id
-router.put('/:userId', /*router.isMyself,*/ function(req, res) {
+router.put('/:userId', router.isMyself, function(req, res) {
     var args = {
         userId: req.params.userId,
         data: req.body

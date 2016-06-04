@@ -47,7 +47,6 @@ define([
                 },
                 render: function(number) {
                     this.number = number;
-                    console.log(this.model.attributes._id);
                     var data = {
                         course: this.model.attributes
                     };
@@ -56,6 +55,7 @@ define([
                 },
                 start: function(event) {
                     event.preventDefault();
+                    event.stopPropagation();
                     app.router.navigate("main/" + this.number, {
                         trigger: true
                     });
@@ -69,11 +69,12 @@ define([
                 i18n: i18n
             };
             this.$el.html(tpl(data));
-            this.courses.fetch(/*{
-                success: function(collection, response, options) {
-                    self.populateCoursesTable(collection);
+            app.profile.fetch({
+                success: function(model, response, options) {
+                    self.courses.fetch();
                 }
-            }*/);
+            });
+            //this.courses.fetch();
             this.$outputCoursesBody = this.$(".courses-body");
             return this;
         },

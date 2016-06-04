@@ -98,8 +98,7 @@ var User = new Schema({
     // Пройденные курсы
     completedCourses: [{
         type: Schema.Types.ObjectId,
-        ref: 'Course',
-        required: true
+        ref: 'Course'
     }]
 });
 User.methods.encryptPassword = function(password) {

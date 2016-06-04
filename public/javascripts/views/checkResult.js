@@ -23,8 +23,9 @@ define([
             // Sub views
             this.view = {};
         },
-        render: function() {
+        render: function(currentTask) {
             var self = this;
+            this.currentTask = currentTask;
             var tpl = _.template(this.templates['main-tpl']);
             var data = {
                 i18n: i18n
@@ -55,6 +56,7 @@ define([
             //console.log(canvas);
         },
         checkDiff: function() {
+            var self = this;
             var userResult = document.querySelector(".panel-result").firstChild;
             var sample = document.querySelector(".panel-sample").firstChild;
             app.sampleBase64 = sample.src;
@@ -70,6 +72,20 @@ define([
                     if (document.querySelector(".panel-difference").firstChild) 
                     document.querySelector(".panel-difference").removeChild(document.querySelector(".panel-difference").firstChild);
                     document.querySelector(".panel-difference").appendChild(i);
+                    
+                    if (data.misMatchPercentage < 0.1) {
+                        var completedCourses = app.profile.get("completedCourses");
+                        if (!completedCourses) {
+                            app.profile.set("completedCourses", self.currentTask.attributes._id);
+                        } else {
+                            //if (_.indexOf(completedCourses, self.currentTask.attributes._id) != -1) return;
+                            //if (completedCourses.get(self.currentTask) != undefined) return;
+                            completedCourses.push(self.currentTask.attributes._id);
+                            app.profile.set("completedCourses", completedCourses);
+                            app.profile.save();
+                        }
+                        self.$(".btn-next").css("display", "block");
+                    }
             });
         },
         openResult: function(event) {
@@ -142,6 +158,7 @@ define([
             var data = taskModel.attributes.taskData.data;
             var code = atob(taskModel.attributes.code);
             eval(code);
+            console.log(code)
             //Задание
             var canvas = document.createElement("canvas");
             canvas.height = 300;
