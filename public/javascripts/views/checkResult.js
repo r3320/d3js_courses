@@ -45,20 +45,30 @@ define([
             this.options.openPopup();
         },
         checkResult: function(event) {
-            if (event) event.preventDefault();
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             
-            this.options.takeScreenshot(this.checkDiff.bind(this));
-            if (!document.querySelector(".userResult")) return;
+            this.options.takeScreenshot("svg", "template-visual", this.checkDiff.bind(this), "sampleSvgel");
+            //if (!document.querySelector(".userResult")) return;
             
             console.log("TEST");
             //this.checkDiff();
             this.openResult();
             //console.log(canvas);
         },
-        checkDiff: function() {
+        /**
+         * @param {String} sampleClass - first canvas class
+         * @param {String} resultClass - second canvas class
+         *
+         */
+        checkDiff: function(sampleClass, resultClass) {
             var self = this;
-            var userResult = document.querySelector(".panel-result").firstChild;
-            var sample = document.querySelector(".panel-sample").firstChild;
+            //var userResult = document.querySelector(".panel-result").firstChild;
+            //var sample = document.querySelector(".panel-sample").firstChild;
+            var userResult = document.getElementsByClassName(resultClass)[0];
+            var sample = document.getElementsByClassName(sampleClass)[0];
             app.sampleBase64 = sample.src;
             app.userResultBase64 = userResult.toDataURL("image/png", 0);
             //app.userResultBase64 = userResult.toDataURL();
@@ -149,6 +159,7 @@ define([
         appendImage: function(taskModel) {
             event.preventDefault();
             var tmp = document.createElement("template");
+            tmp.className = "template-visual";
             var svgel = document.createElement("svg");
             svgel.className = "svgel";
             

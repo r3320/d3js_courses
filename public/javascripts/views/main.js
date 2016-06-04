@@ -155,8 +155,8 @@ define([
             event.preventDefault();
             app.logout();
         },
-        takeScreenshot: function(callback) {
-            return this.view.visual.takeScreenshot(callback);
+        takeScreenshot: function(userSvgClass, outputClass, callback, sampleSvgel) {
+            return this.view.visual.takeScreenshot(userSvgClass, outputClass, callback, sampleSvgel);
         },
         dataAceActions: function(currentTask) {
             if (!currentTask.attributes.taskData.data) return;

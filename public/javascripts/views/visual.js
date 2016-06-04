@@ -55,44 +55,48 @@ define([
             this.scr.textContent = scriptContent;
             this.doc.head.appendChild(this.scr);
         },
-        takeScreenshot: function(callback) {
+        /**
+         * @param {String} userSvgClass - Класс svg студента, но основе которого делаем канвас
+         * @param {String} outputClass - Класс контейнера, куда вставим новый канвас
+         * @param {checkDiff} callback(sampleClass, resultClass) - метод checkDiff из view checkResult
+         * @param {String} sampleSvgel - Класс примера, который передадим в callback
+         */
+        takeScreenshot: function(userSvgClass, outputClass, callback, sampleSvgel) {
             var self = this;
-            if (!this.doc.querySelector("svg")) return;
-            if (document.querySelector(".panel-result").firstChild) {
-                document.querySelector(".panel-result").removeChild(document.querySelector(".panel-result").firstChild);
+            //Проверяем, есть ли svg в iframe
+            var userSvgElem = this.doc.getElementsByClassName(userSvgClass)[0];
+            if (!userSvgElem) return;
+            //Проверяем, есть ли в <template=outputClass> канвас с результатом студента .user-result
+            var outputElem = document.getElementsByClassName(outputClass)[0];
+            var userResult = outputElem.getElementsByClassName("user-result")[0];
+            //Если есть - удаляем
+            if (userResult) {
+                outputElem.removeChild(userResult);
             }
-            /*html2canvas(this.doc.body, {
-                onrendered: function(canvas) {
-                    //Do things with output canvas
-                    //self.doc.body.appendChild(canvas);
-                    document.querySelector(".panel-result").appendChild(canvas);
-                },
-                width: 530,
-                height: 300
-            });*/
+            
             var canvas = document.createElement("canvas");
             canvas.height = 300;
             canvas.width = 530;
-            canvas.className = "userResult";
+            canvas.className = "user-result";
             
-            document.querySelector(".panel-result").appendChild(canvas);
+            outputElem.appendChild(canvas);
             
             var ctx = canvas.getContext('2d');
             
             var DOMURL = window.URL || window.webkitURL || window;
             
-            //var svg = '<svg xmlns="http://www.w3.org/2000/svg" class="svg" width="530" height="300"><g><circle r="10" cy="183" cx="10" style="fill: rgb(31, 119, 180);"></circle><text y="180" x="2" dy=".5em">17</text></g><g><circle r="40" cy="177" cx="106" style="fill: rgb(174, 199, 232);"></circle><text y="174" x="98" dy=".5em">18</text></g><g><circle r="80" cy="77" cx="266" style="fill: rgb(255, 127, 14);"></circle><text y="74" x="258" dy=".5em">19</text></g><g><circle r="80" cy="43" cx="34" style="fill: rgb(255, 187, 120);"></circle><text y="40" x="26" dy=".5em">20</text></g><g><circle r="40" cy="209" cx="394" style="fill: rgb(44, 160, 44);"></circle><text y="206" x="386" dy=".5em">21</text></g></svg>';
-            var svg = this.doc.querySelector("svg").outerHTML;
+            var svgOuterHtml = userSvgElem.outerHTML;
+            
             var img = new Image();
-            var newsvg = new Blob([svg], {type: 'image/svg+xml;charset=utf-8'});
-            console.log(newsvg);
+            var newsvg = new Blob([svgOuterHtml], {type: 'image/svg+xml;charset=utf-8'});
+            
             var url = DOMURL.createObjectURL(newsvg);
-            console.log(callback);
+            //console.log(callback("user-result", ""));
             img.onload = function () {
                 ctx.drawImage(img, 0, 0);
                 console.log(ctx);
                 DOMURL.revokeObjectURL(url);
-                callback();
+                callback(sampleSvgel, "user-result");
             }
             img.src = url;
         }
