@@ -32,6 +32,7 @@ define([
             this.doc =  iframe.contentDocument || iframe.contentWindow.document;
             app.iframe = this.doc;
             this.doc.body.setAttribute("style", "margin: 0;");
+            this.doc.body.setAttribute("overflow-y", "hidden;");
             this.loadDefaultScripts();
             return this;
         },
@@ -45,27 +46,28 @@ define([
         destroy: function() {
             this.remove();
         },
-        loadScript: function(scriptContent) {
-            if (this.doc.querySelector(".d3script")) {
-                var el = this.doc.querySelector(".d3script");
+        loadScript: function(scriptClassName, scriptContent) {
+            var el = this.doc.getElementsByClassName(scriptClassName)[0];
+            if (el) {
                 el.parentNode.removeChild(el);
             }
             this.scr = this.doc.createElement('script');
-            this.scr.className = "d3script";
+            this.scr.className = scriptClassName;
             this.scr.textContent = scriptContent;
             this.doc.head.appendChild(this.scr);
         },
         /**
-         * @param {String} userSvgClass - Класс svg студента, но основе которого делаем канвас
+         * @param {String} userSvgClass - svg студента, но основе которого делаем канвас
          * @param {String} outputClass - Класс контейнера, куда вставим новый канвас
          * @param {checkDiff} callback(sampleClass, resultClass) - метод checkDiff из view checkResult
          * @param {String} sampleSvgel - Класс примера, который передадим в callback
+         * return true - если метод выполнился успешно, false - если нечего проверять
          */
         takeScreenshot: function(userSvgClass, outputClass, callback, sampleSvgel) {
             var self = this;
             //Проверяем, есть ли svg в iframe
-            var userSvgElem = this.doc.getElementsByClassName(userSvgClass)[0];
-            if (!userSvgElem) return;
+            var userSvgElem = this.doc.getElementsByTagName(userSvgClass)[0];
+            if (!userSvgElem) return false;
             //Проверяем, есть ли в <template=outputClass> канвас с результатом студента .user-result
             var outputElem = document.getElementsByClassName(outputClass)[0];
             var userResult = outputElem.getElementsByClassName("user-result")[0];
@@ -91,7 +93,7 @@ define([
             var newsvg = new Blob([svgOuterHtml], {type: 'image/svg+xml;charset=utf-8'});
             
             var url = DOMURL.createObjectURL(newsvg);
-            //console.log(callback("user-result", ""));
+            
             img.onload = function () {
                 ctx.drawImage(img, 0, 0);
                 console.log(ctx);
@@ -99,6 +101,7 @@ define([
                 callback(sampleSvgel, "user-result");
             }
             img.src = url;
+            return true;
         }
     });
     return View;

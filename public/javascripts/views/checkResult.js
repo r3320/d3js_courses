@@ -10,8 +10,6 @@ define([
             "click .btn-theory": "openTheory",
             "click .btn-check": "checkResult",
             "click .btn-sample": "openSample",
-            "click .btn-result": "openResult",
-            "click .btn-overlay": "openOverlay",
             "click .btn-difference": "openDifference"
         },
         initialize: function(options) {
@@ -50,13 +48,9 @@ define([
                 event.stopPropagation();
             }
             
-            this.options.takeScreenshot("svg", "template-visual", this.checkDiff.bind(this), "sampleSvgel");
-            //if (!document.querySelector(".userResult")) return;
-            
-            console.log("TEST");
-            //this.checkDiff();
-            this.openResult();
-            //console.log(canvas);
+            var result = this.options.takeScreenshot("svg", "template-visual", this.checkDiff.bind(this), "sampleSvgel");
+            console.log(result);
+            if (result) this.openDifference();
         },
         /**
          * @param {String} sampleClass - first canvas class
@@ -65,13 +59,10 @@ define([
          */
         checkDiff: function(sampleClass, resultClass) {
             var self = this;
-            //var userResult = document.querySelector(".panel-result").firstChild;
-            //var sample = document.querySelector(".panel-sample").firstChild;
             var userResult = document.getElementsByClassName(resultClass)[0];
             var sample = document.getElementsByClassName(sampleClass)[0];
             app.sampleBase64 = sample.src;
             app.userResultBase64 = userResult.toDataURL("image/png", 0);
-            //app.userResultBase64 = userResult.toDataURL();
             //2 px погрешность
             console.log(imagediff.equal(userResult, sample, 2));
             resemble(userResult.toDataURL()).compareTo(sample.toDataURL()).onComplete(function(data) {
@@ -88,8 +79,7 @@ define([
                         if (!completedCourses) {
                             app.profile.set("completedCourses", self.currentTask.attributes._id);
                         } else {
-                            //if (_.indexOf(completedCourses, self.currentTask.attributes._id) != -1) return;
-                            //if (completedCourses.get(self.currentTask) != undefined) return;
+                            if (_.indexOf(completedCourses, self.currentTask) != -1) console.log("yep")
                             completedCourses.push(self.currentTask.attributes._id);
                             app.profile.set("completedCourses", completedCourses);
                             app.profile.save();
@@ -97,19 +87,6 @@ define([
                         self.$(".btn-next").css("display", "block");
                     }
             });
-        },
-        openResult: function(event) {
-            if (event) event.preventDefault();
-            
-            this.$(".panel-result").css("z-index", 100);
-            this.$(".panel-sample").css("z-index", 1);
-            this.$(".panel-overlay").css("z-index", 1);
-            this.$(".panel-difference").css("z-index", 1);
-            
-            this.$(".btn-sample").removeClass("active");
-            this.$(".btn-overlay").removeClass("active");
-            this.$(".btn-difference").removeClass("active");
-            this.$(".btn-result").addClass("active");
         },
         openSample: function(event) {
             if (event) event.preventDefault();
@@ -124,19 +101,6 @@ define([
             this.$(".btn-difference").removeClass("active");
             this.$(".btn-sample").addClass("active");
         },
-        openOverlay: function(event) {
-            if (event) event.preventDefault();
-            
-            this.$(".panel-overlay").css("z-index", 100);
-            this.$(".panel-sample").css("z-index", 1);
-            this.$(".panel-result").css("z-index", 1);
-            this.$(".panel-difference").css("z-index", 1);
-            
-            this.$(".btn-result").removeClass("active");
-            this.$(".btn-difference").removeClass("active");
-            this.$(".btn-sample").removeClass("active");
-            this.$(".btn-overlay").addClass("active");
-        },
         openDifference: function(event) {
             if (event) event.preventDefault();
             
@@ -150,12 +114,6 @@ define([
             this.$(".btn-overlay").removeClass("active");
             this.$(".btn-difference").addClass("active");
         },
-        /*
-        appendImage: function(taskModel) {
-            var image = new Image();
-            image.src = taskModel.attributes.taskData;
-            document.querySelector(".panel-sample").appendChild(image);
-        },*/
         appendImage: function(taskModel) {
             event.preventDefault();
             var tmp = document.createElement("template");

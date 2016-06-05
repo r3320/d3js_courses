@@ -54,6 +54,7 @@ define([
             this.htmlAce = this.view.aceView.setElement(this.$('.panel-code-html')).render("", true);
             this.jsAce = this.view.aceView.setElement(this.$('.panel-code-js')).render("javascript", true);
             this.dataAce = this.view.aceView.setElement(this.$('.panel-code-data')).render("data", false);
+            this.disableEditor(this.dataAce);
             
             //this.view.checkResult.setElement(this.$('.panel-check-result')).render();
             this.tasks.fetch({
@@ -69,6 +70,11 @@ define([
                 }
             });
             return this;
+        },
+        disableEditor: function(editor) {
+            //editor.container.style.pointerEvents = "none";
+            editor.renderer.setStyle("disabled", true);
+            editor.blur();
         },
         destroy: function() {
             for (var v in this.view) {
@@ -100,7 +106,7 @@ define([
                     self.view.visual.doc.body.innerHTML = editor.getValue();
                     
                     //Обновим скрипт в iframe из js Ace
-                    self.view.visual.loadScript(self.jsAce.getValue());
+                    self.view.visual.loadScript("d3script", self.jsAce.getValue());
                 } catch(e) {
                     console.log(e);
                 }
@@ -116,7 +122,7 @@ define([
                 
                 setTimeout(function() {
                     if (!self.lastUpdatedTime || moment().diff(self.lastUpdatedTime) > 1000) {
-                        self.view.visual.loadScript(editor.getValue());
+                        self.view.visual.loadScript("d3script", editor.getValue());
                     }
                 }, 1000);
                 //self.lastUpdatedTime = moment.now();
@@ -180,7 +186,7 @@ define([
                 this.dataAce.insert("//" + currentTask.attributes.taskData.dataInfo + "\n");
             }
             if (figureStr) {
-                this.dataAce.insert(figureStr);
+                this.dataAce.insert("var data = \n" + figureStr);
             }
             
             this.dataAce.insert("\n\n");
@@ -189,8 +195,9 @@ define([
                 this.dataAce.insert("//" + currentTask.attributes.taskData.helpInfo + "\n");
             }
             if (squareStr) {
-                this.dataAce.insert(squareStr);
+                this.dataAce.insert("var help = \n" + squareStr);
             }
+            this.view.visual.loadScript("courseData", this.dataAce.getValue());
         }
     });
     return View;
