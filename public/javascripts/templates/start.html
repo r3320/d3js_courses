@@ -65,8 +65,8 @@
         <h3><%- course.taskName %></h3>
         <p><%= course.taskDescription %></p>
     </td>
-    <td><% if (_.indexOf(completedCourses, course._id) != -1) {
-            %> пройдено <%
-        }%></td>
+    <td><span class="label label-success"><% if (_.indexOf(completedCourses, course._id) != -1) {
+            %> Пройдено <%
+        }%></span></td>
     <td><a href="#" class="btn btn-default start-course-btn">Начать</a></td>
 </script>
