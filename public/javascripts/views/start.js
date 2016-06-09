@@ -69,11 +69,7 @@ define([
                 i18n: i18n
             };
             this.$el.html(tpl(data));
-            app.profile.fetch({
-                success: function(model, response, options) {
-                    self.courses.fetch();
-                }
-            });
+            self.courses.fetch();
             //this.courses.fetch();
             this.$outputCoursesBody = this.$(".courses-body");
             return this;

@@ -10,7 +10,8 @@ define([
             "click .btn-theory": "openTheory",
             "click .btn-check": "checkResult",
             "click .btn-sample": "openSample",
-            "click .btn-difference": "openDifference"
+            "click .btn-difference": "openDifference",
+            "click .btn-next": "openNextTask"
         },
         initialize: function(options) {
             // Variables
@@ -40,6 +41,7 @@ define([
         },
         openTheory: function(event) {
             event.preventDefault();
+            event.stopPropagation();
             this.options.openPopup();
         },
         checkResult: function(event) {
@@ -66,30 +68,37 @@ define([
             //2 px погрешность
             console.log(imagediff.equal(userResult, sample, 2));
             resemble(userResult.toDataURL()).compareTo(sample.toDataURL()).onComplete(function(data) {
-                    console.log(data);
-                    var i = new Image();
-                    i.src = data.getImageDataUrl();
-                    console.log(i);
-                    if (document.querySelector(".panel-difference").firstChild) 
-                    document.querySelector(".panel-difference").removeChild(document.querySelector(".panel-difference").firstChild);
-                    document.querySelector(".panel-difference").appendChild(i);
-                    
-                    if (data.misMatchPercentage < 0.1) {
-                        var completedCourses = app.profile.get("completedCourses");
-                        if (!completedCourses) {
-                            app.profile.set("completedCourses", self.currentTask.attributes._id);
-                        } else {
-                            if (_.indexOf(completedCourses, self.currentTask) != -1) console.log("yep")
+                console.log(data);
+                var i = new Image();
+                i.src = data.getImageDataUrl();
+                console.log(i);
+                if (document.querySelector(".panel-difference").firstChild) 
+                document.querySelector(".panel-difference").removeChild(document.querySelector(".panel-difference").firstChild);
+                document.querySelector(".panel-difference").appendChild(i);
+                //TODO
+                if (data.misMatchPercentage < 0.1) {
+                    var completedCourses = app.profile.get("completedCourses");
+                    console.log(completedCourses);
+                    if (!completedCourses) {
+                        completedCourses.push(self.currentTask.attributes._id);
+                        app.profile.set("completedCourses", completedCourses);
+                        app.profile.save();
+                    } else {
+                        if (_.indexOf(completedCourses, self.currentTask.attributes._id) == -1) {
                             completedCourses.push(self.currentTask.attributes._id);
                             app.profile.set("completedCourses", completedCourses);
                             app.profile.save();
                         }
-                        self.$(".btn-next").css("display", "block");
                     }
+                    self.$(".btn-next").css("display", "block");
+                }
             });
         },
         openSample: function(event) {
-            if (event) event.preventDefault();
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             
             this.$(".panel-sample").css("z-index", 100);
             this.$(".panel-result").css("z-index", 1);
@@ -102,8 +111,10 @@ define([
             this.$(".btn-sample").addClass("active");
         },
         openDifference: function(event) {
-            if (event) event.preventDefault();
-            
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             this.$(".panel-difference").css("z-index", 100);
             this.$(".panel-overlay").css("z-index", 1);
             this.$(".panel-sample").css("z-index", 1);
@@ -113,6 +124,14 @@ define([
             this.$(".btn-sample").removeClass("active");
             this.$(".btn-overlay").removeClass("active");
             this.$(".btn-difference").addClass("active");
+        },
+        openNextTask: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var nextPage = Number.parseInt(this.currentTask.attributes.number + 1);
+            app.router.navigate("main/" + nextPage, {
+                trigger: true
+            });
         },
         appendImage: function(taskModel) {
             event.preventDefault();

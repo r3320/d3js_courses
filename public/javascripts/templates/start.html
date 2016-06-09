@@ -65,7 +65,7 @@
         <h3><%- course.taskName %></h3>
         <p><%= course.taskDescription %></p>
     </td>
-    <td><% if (_.indexOf(app.profile.attributes.completedCoureses, course._id) != -1) {
+    <td><% if (_.indexOf(app.profile.get("completedCoureses"), course._id) != -1) {
             %> пройдено <%
         }%></td>
     <td><a href="#" class="btn btn-default start-course-btn">Начать</a></td>

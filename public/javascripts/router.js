@@ -77,6 +77,7 @@ define(["collections/courses"], function(Courses) {
             require([
                 "views/main"
             ], function(View) {
+                console.log(page, courses.findWhere({number: eval(page)}));
                 if (page && courses.findWhere({number: eval(page)})) {
                     self.render(View, {page: page}, true);
                 } else {
