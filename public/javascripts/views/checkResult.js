@@ -79,6 +79,7 @@ define([
                 if (data.misMatchPercentage < 0.1) {
                     var completedCourses = app.profile.get("completedCourses");
                     console.log(completedCourses);
+                    app.profile.fetch();
                     if (!completedCourses) {
                         completedCourses.push(self.currentTask.attributes._id);
                         app.profile.set("completedCourses", completedCourses);

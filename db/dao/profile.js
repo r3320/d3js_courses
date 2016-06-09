@@ -109,8 +109,9 @@ module.exports = {
         });
     },
     get: function(args, callback) {
-        //User.findById(args.userId).exec(callback);
-        User.findById(args.userId).populate('completedCourses').exec(callback);
+        User.findById(args.userId).exec(callback);
+        //Не получаем модели курсов в модель пользователя, нам нужны только айдишники пройденных курсов
+        //User.findById(args.userId).populate('completedCourses').exec(callback);
     },
     update: function(args, callback) {
         var data = args.data || {};

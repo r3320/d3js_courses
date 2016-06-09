@@ -30,6 +30,7 @@ define([
                     this.sort();
                 }
             });
+            app.profile.fetch();
             this.courses = new Courses();
             this.firstModelAt = 1;
             this.listenTo(this.courses, 'add', this.appendCourse);
@@ -47,8 +48,10 @@ define([
                 },
                 render: function(number) {
                     this.number = number;
+                    var completedCourses = app.profile.get("completedCourses");
                     var data = {
-                        course: this.model.attributes
+                        course: this.model.attributes,
+                        completedCourses: completedCourses
                     };
                     this.$el.html(this.tpl(data));
                     return this;
