@@ -72,7 +72,7 @@ define([
             return this;
         },
         disableEditor: function(editor) {
-            //editor.container.style.pointerEvents = "none";
+            editor.container.style.pointerEvents="none";
             editor.renderer.setStyle("disabled", true);
             editor.blur();
         },
